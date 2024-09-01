@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sneakercleanic/screens/TrackerScreen.dart';
 import 'package:sneakercleanic/screens/authentication/LoginScreen.dart';
 
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: TrackerScreen(),
     );
   }
 }

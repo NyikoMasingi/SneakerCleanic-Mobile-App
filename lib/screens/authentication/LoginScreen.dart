@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sneakercleanic/screens/HomeScreen.dart';
+import 'package:sneakercleanic/screens/TrackerScreen.dart';
 
 
 
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.blue,
                   onPressed: (){
                     userLogin(context);
-                    checkValid();
+
                   },
                   child: const Text(
                     "Login",
@@ -99,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
             setState(() {
               _isValid = true;
             });
+            checkValid();
           }
           else{
             showErrorBanner("Invalid Credentials" ,"Please double check your phone number and password");
@@ -118,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if(_isValid){
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen())
+          MaterialPageRoute(builder: (context) => TrackerScreen())
       );
     }
   }
