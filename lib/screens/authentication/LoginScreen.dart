@@ -194,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: CupertinoButton(
                             color: CupertinoColors.inactiveGray,
                             onPressed: (){
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => Signupscreen())
                               );
