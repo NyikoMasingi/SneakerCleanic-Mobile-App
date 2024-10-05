@@ -5,7 +5,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sneakercleanic/screens/HomeScreen.dart';
 import 'package:sneakercleanic/screens/TrackerScreen.dart';
-
+import 'package:sneakercleanic/screens/authentication/ForgotPasswordScreen.dart';
+import 'package:sneakercleanic/screens/authentication/SignupScreen.dart';
+import '../../widgets/BannerWidget.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -37,41 +39,44 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 SizedBox(
                   height: h * 0.38,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            scale: 6,
-                            image: AssetImage(
-                                'assets/logo.png'
-                            )
-                        ),
-                      color: Colors.black,
-                      shape: BoxShape.rectangle
+                  child: Padding(
+                    padding: EdgeInsets.only(top:h*0.05),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              scale: 8,
+                              image: AssetImage(
+                                  'assets/logo.png'
+                              )
+                          ),
+                        color: CupertinoColors.inactiveGray,
+                        shape: BoxShape.circle
+                      ),
                     ),
-
                   ),
+                ),
+                SizedBox(
+                  height: h * 0.01,
                 ),
                 Container(
                   height: h* 0.1,
-                  alignment: Alignment.center,
-                  child: const Column(
-                    children: [
-                      Text(
-                        'SNEAKER',
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.black,
-                          decoration: TextDecoration.none
-                        ),
-                      ),
-                      Text(
-                        'CLEANIC',
-                        style: TextStyle(
-                          fontSize: 24,
-                          decoration: TextDecoration.none
-                        ),
-                      )
-                    ],
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Step into Freshness',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            decoration: TextDecoration.none
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -84,8 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: BoxDecoration(
                               borderRadius: const BorderRadius.all(Radius.circular(50)),
                               border: Border.all(
-                                width: 1,
-                                color: const Color.fromRGBO(255, 80, 80 ,0.7),
+                                width: 2,
+                                color: const Color.fromRGBO(255, 80, 80 ,1),
                               )
                           ),
                           child: CupertinoListTile(
@@ -106,14 +111,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: BoxDecoration(
                             borderRadius: const BorderRadius.all(Radius.circular(50)),
                             border: Border.all(
-                              width: 1,
-                              color: const Color.fromRGBO(255, 80, 80 ,0.7),
+                              width: 2,
+                              color: const Color.fromRGBO(255, 80, 80 ,1),
                             )
                           ),
                           child: CupertinoListTile(
                             leading: const Icon(
                               Icons.lock,
-                              color: Color.fromRGBO(255, 80, 80 ,0.7),
+                              color: Color.fromRGBO(255, 80, 80 ,0.5),
                             ),
                             title: CupertinoTextField(
                               decoration: const BoxDecoration(),
@@ -135,14 +140,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: const BoxDecoration(
                     color: Color.fromRGBO(189, 7, 7, 1),
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50))
-            
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
                         TextButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ForgotPasswordScreen())
+                            );
+                          },
                           child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
@@ -158,14 +167,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: CupertinoButton(
                             color: Colors.white,
                             onPressed: (){
-            
+                              userLogin(context);
                             },
                             child: const Text(
                               'Login',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
-            
                               ),
                             ),
                           ),
@@ -184,9 +192,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: w * 0.7,
                           height: h * 0.06,
                           child: CupertinoButton(
-                            color: Colors.grey,
-                            onPressed: (){},
-            
+                            color: CupertinoColors.inactiveGray,
+                            onPressed: (){
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Signupscreen())
+                              );
+                            },
                             child: const Text(
                               'Create an account',
                               style: TextStyle(
@@ -203,7 +215,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-
       ],
     );
   }
@@ -219,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String password = passEditingController.text.trim();
 
     if(phoneNumber.isEmpty && password.isEmpty){
-      showErrorBanner("ERROR" ,"Fields cannot be empty");
+      Bannerwidget().showErrorBanner(context,"ERROR" ,"Fields cannot be empty");
     }
     else{
       try{
@@ -235,12 +246,12 @@ class _LoginScreenState extends State<LoginScreen> {
             checkValid();
           }
           else{
-            showErrorBanner("Invalid Credentials" ,"Please double check your phone number and password");
+            Bannerwidget().showErrorBanner(context, "Invalid Credentials" ,"Please double check your phone number and password");
           }
         }
       }
       catch(e){
-        showErrorBanner("Invalid Credentials" ,"Please double check your phone number and password");
+        Bannerwidget().showErrorBanner(context,"Invalid Credentials" ,"Please double check your phone number and password");
       }
     }
     setState(() {
@@ -257,27 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  showErrorBanner(String title,  String message){
-    showCupertinoDialog(
-        context: context,
-        builder: (BuildContext context){
-          return CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              )
-            ],
 
-          );
-        }
-    );
-  }
   
   
 }
