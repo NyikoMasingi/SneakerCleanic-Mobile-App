@@ -1,10 +1,9 @@
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sneakercleanic/screens/HomeScreen.dart';
-import 'package:sneakercleanic/screens/TrackerScreen.dart';
 import 'package:sneakercleanic/screens/authentication/ForgotPasswordScreen.dart';
 import 'package:sneakercleanic/screens/authentication/SignupScreen.dart';
 import '../../widgets/BannerWidget.dart';
@@ -149,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: (){
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ForgotPasswordScreen())
+                                MaterialPageRoute(builder: (context) => const ForgotPasswordScreen())
                             );
                           },
                           child: const Text(
@@ -196,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: (){
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Signupscreen())
+                                  MaterialPageRoute(builder: (context) => const Signupscreen())
                               );
                             },
                             child: const Text(
@@ -215,55 +214,79 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+        if(_isLoading)
+          Center(
+            child: Container(
+              width: w,
+              height: h,
+              decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5)
+              ),
+              child: const CupertinoActivityIndicator(
+                color: Colors.white,
+              ),
+            ),
+          )
       ],
     );
   }
-
 
   void userLogin(BuildContext context) async{
     setState(() {
       _isLoading = true;
     });
 
-    //await Future.delayed(const Duration(seconds: 3));
     String phoneNumber = phoneNumberEditingController.text.trim();
     String password = passEditingController.text.trim();
 
-    if(phoneNumber.isEmpty && password.isEmpty){
-      Bannerwidget().showErrorBanner(context,"ERROR" ,"Fields cannot be empty");
+    if(phoneNumber.isEmpty && password.isEmpty) {
+      Bannerwidget().showErrorBanner(
+          context, "Fields cannot be empty");
     }
     else{
       try{
-        final response = await http.get(Uri.parse("https://cornadarchitecturaldraughting.co.za/api_test/script.php?phone_number=$phoneNumber"));
-        if(response.statusCode == 200){
-          //List<dynamic> users = jsonDecode(response.body);
-          Map<dynamic, dynamic> user = jsonDecode(response.body);
+        String api = "https://cornadarchitecturaldraughting.co.za/api_test/script.php/login";
+        String cred;
+        (phoneNumber.contains("@")) ? cred = "email" : cred = "phone_number";
+        Map<String, String> requestBody = {
+          cred : phoneNumber,
+          "password": password
+        };
 
-          if(user["password"] == password){
-            setState(() {
-              _isValid = true;
-            });
-            checkValid();
-          }
-          else{
-            Bannerwidget().showErrorBanner(context, "Invalid Credentials" ,"Please double check your phone number and password");
-          }
+        final response = await http.post(Uri.parse(api),
+          headers: {
+            "Content-Type": "application/json", // Make sure the request is JSON
+          }, body: jsonEncode(requestBody));
+
+        final decodedResponse = jsonDecode(response.body);
+        setState(() {
+          _isLoading = false;
+        });
+        if(decodedResponse['results']['name'] != ''){
+          setState(() {
+            _isValid = true;
+          });
+          checkValid();
         }
-      }
-      catch(e){
-        Bannerwidget().showErrorBanner(context,"Invalid Credentials" ,"Please double check your phone number and password");
+        else{
+          Bannerwidget().showErrorBanner(context,"Please double check your phone number and password");
+        }
+
+      }catch(e){
+        setState(() {
+          _isLoading = false;
+        });
+        Bannerwidget().showErrorBanner(context,"Please double check your phone number and password");
       }
     }
-    setState(() {
-      _isLoading = false;
-    });
+
   }
 
   void checkValid(){
     if(_isValid){
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => TrackerScreen())
+          MaterialPageRoute(builder: (context) => const HomeScreen())
       );
     }
   }

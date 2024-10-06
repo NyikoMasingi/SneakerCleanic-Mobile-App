@@ -187,6 +187,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   resetPassword(BuildContext context){
-    Bannerwidget().showErrorBanner(context, "Oops", "Method not implemented yet");
+    Bannerwidget().showErrorBanner(context, "Method not implemented yet");
   }
 }

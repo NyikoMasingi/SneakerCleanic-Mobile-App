@@ -16,7 +16,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(),
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.white,
+        leading: null,
+      ),
       child: Text("Home page")
     );
   }
