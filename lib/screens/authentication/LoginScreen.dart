@@ -20,9 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final phoneNumberEditingController = TextEditingController();
   final passEditingController = TextEditingController();
   bool _isLoading = false;
-  bool _isValid = false;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: (){
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const Signupscreen())
+                                  MaterialPageRoute(builder: (context) => const SignupScreen())
                               );
                             },
                             child: const Text(
@@ -253,47 +250,36 @@ class _LoginScreenState extends State<LoginScreen> {
           "password": password
         };
 
-        final response = await http.post(Uri.parse(api),
+        await http.post(Uri.parse(api),
           headers: {
             "Content-Type": "application/json", // Make sure the request is JSON
-          }, body: jsonEncode(requestBody));
-
-        final decodedResponse = jsonDecode(response.body);
-        setState(() {
-          _isLoading = false;
+          }, body: jsonEncode(requestBody)).then((response)=>{
+            if(jsonDecode(response.body)['results']['name'] != ''){
+              login()
+            }
+            else{
+                Bannerwidget().showErrorBanner(context,"Please double check your credentials")
+            }
         });
-        if(decodedResponse['results']['name'] != ''){
-          setState(() {
-            _isValid = true;
-          });
-          checkValid();
-        }
-        else{
-          Bannerwidget().showErrorBanner(context,"Please double check your phone number and password");
-        }
-
       }catch(e){
         setState(() {
           _isLoading = false;
         });
-        Bannerwidget().showErrorBanner(context,"Please double check your phone number and password");
+        Bannerwidget().showErrorBanner(context,"Please double check your credentials");
       }
     }
 
   }
+  void login(){
+    setState(() {
+      _isLoading = false;
+    });
 
-  void checkValid(){
-    if(_isValid){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen())
-      );
-    }
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen())
+    );
   }
-
-
-  
-  
 }
 
 

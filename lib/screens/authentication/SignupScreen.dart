@@ -10,14 +10,14 @@ import 'package:http/http.dart' as http;
 
 
 
-class Signupscreen extends StatefulWidget {
-  const Signupscreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<Signupscreen> createState() => _SignupscreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupscreenState extends State<Signupscreen> {
+class _SignupScreenState extends State<SignupScreen> {
 
   final emailEditingController = TextEditingController();
   final nameEditingController = TextEditingController();
@@ -341,32 +341,31 @@ class _SignupscreenState extends State<Signupscreen> {
           "phone_number" : numberEditingController.text.trim(),
           "password" : passwordEditingController.text.trim()
         };
-        final response = await http.post(
+        await http.post(
             Uri.parse(api),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body : jsonEncode(customer)
-        );
-        final decodedResponse = jsonDecode(response.body);
-        if(decodedResponse["status"] == true){
-          Bannerwidget().showSuccessBanner(context, "Account Created", (){
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen())
-            );
-          });
-        }
-        else{
-          throw Exception("Account could not be created");
-        }
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body : jsonEncode(customer)
+        ).then((response)=>{
+          if(jsonDecode(response.body)['status'] == true){
+            Bannerwidget().showSuccessBanner(context, "Account Created", (){
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen())
+              );
+            })
+          }
+          else{
+            throw Exception("Account could not be created")
+          }
+        });
       }catch(e){
         Bannerwidget().showErrorBanner(context, e.toString());
       }
 
 
     }
-
     setState(() {
       isLoading = false;
     });
