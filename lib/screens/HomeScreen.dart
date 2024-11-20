@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<Widget> tabs = [
       const Dashboard(),
       const TrackScreen(),
-      const RateScreen(),
+      RateScreen(),
       const ContactScreen(),
       const ProfileScreen(),
     ];
