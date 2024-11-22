@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sneakercleanic/screens/HomeScreen.dart';
 import 'package:sneakercleanic/screens/TrackerScreen.dart';
 import 'package:sneakercleanic/screens/authentication/LoginScreen.dart';
 
@@ -15,8 +16,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Sneaker Cleanic',
       theme: ThemeData(
+        fontFamily: 'futura',
         // This is the theme of your application.
         //
         // TRY THIS: Try running your application with "flutter run". You'll see
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: HomeScreen(),
     );
   }
 }

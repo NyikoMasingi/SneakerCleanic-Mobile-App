@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: const BoxDecoration(),
                               controller: phoneNumberEditingController,
                               placeholder: "Email or Phone",
-                              maxLength: 10,
+                              maxLength: 100,
                             ),
                           ),
                         ),
