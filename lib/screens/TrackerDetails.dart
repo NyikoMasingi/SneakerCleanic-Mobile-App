@@ -119,7 +119,7 @@ class _TrackerdetailsState extends State<Trackerdetails> {
               Row(
                 children: [
                   SizedBox(
-                    height: h * 0.4,
+                    height: h * 0.42,
                     width: w * 0.1,
                     child: Stack(
                       alignment: Alignment.topCenter,
